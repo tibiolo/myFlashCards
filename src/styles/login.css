@@ -6,16 +6,20 @@
 }
 
 form {
+  width: 90%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   background-color: white;
   padding: 2rem;
-  gap: 1rem;
+  gap: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25), 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 form h2 {
+  color: #4F4F4F;
+  font-size: 1.8rem;
   margin-top: 0;
   text-align: center;
 }
@@ -38,7 +42,8 @@ form button {
   border: none;
   border-radius: 0.5rem;
   color: white;
-  padding: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.8rem;
   background-color: #007bff;
   transition: background-color 0.3s ease;
 }
@@ -46,4 +51,42 @@ form button {
 form button:hover {
   cursor: pointer;
   background-color: #0056b3;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+  margin-right: 10px;
+  background-color: white;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.custom-checkbox input:checked + .checkmark {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }

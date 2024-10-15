@@ -19,6 +19,10 @@ function Login(props) {
           placeholder={'Password'}
           autocomplete={'current-password'}
         />
+        <label class="custom-checkbox">
+          <Input type="checkbox" />
+          <span class="checkmark"></span> Remember me
+        </label>
         <button type="submit">Sign In</button>
       </form>
     </div>
