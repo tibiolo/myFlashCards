@@ -1,4 +1,4 @@
-.login-form-container {
+.sign-in-up-container {
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -100,7 +100,3 @@ form button:hover {
   transform: rotate(45deg);
 }
 
-.register-link {
-  color: #007bff;
-  cursor: pointer;
-}
