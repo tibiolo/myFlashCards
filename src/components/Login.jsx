@@ -6,7 +6,10 @@ function Login(props) {
   return (
     <div className="login-form-container">
       <form action="Submit" method="post">
-        <h2>Sign In</h2>
+        <div className="form-title">
+          <h2>Sign In</h2>
+          <p>Please sign in to continue</p>
+        </div>
         <Input
           type={'email'}
           name={'email'}
@@ -19,11 +22,16 @@ function Login(props) {
           placeholder={'Password'}
           autocomplete={'current-password'}
         />
-        <label class="custom-checkbox">
+        <label className="custom-checkbox">
           <Input type="checkbox" />
-          <span class="checkmark"></span> Remember me
+          <span className="checkmark"></span> Remember me
         </label>
-        <button type="submit">Sign In</button>
+        <button className="no-gap" type="submit">
+          Sign In
+        </button>
+        <p>
+          Don't have an account? <a href="/Register">Register</a>
+        </p>
       </form>
     </div>
   );

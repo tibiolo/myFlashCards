@@ -17,10 +17,19 @@ form {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25), 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
+form .no-gap {
+  margin-bottom: -2rem;
+}
+
 form h2 {
-  color: #4F4F4F;
+  color: #4f4f4f;
   font-size: 1.8rem;
   margin-top: 0;
+  margin-bottom: -0.5rem;
+  text-align: center;
+}
+
+form p {
   text-align: center;
 }
 
@@ -56,7 +65,6 @@ form button:hover {
 .custom-checkbox {
   display: flex;
   align-items: center;
-  cursor: pointer;
 }
 
 .custom-checkbox input {
@@ -72,6 +80,7 @@ form button:hover {
   margin-right: 10px;
   background-color: white;
   transition: background-color 0.2s, border-color 0.2s;
+  cursor: pointer;
 }
 
 .custom-checkbox input:checked + .checkmark {
@@ -89,4 +98,9 @@ form button:hover {
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+.register-link {
+  color: #007bff;
+  cursor: pointer;
 }
