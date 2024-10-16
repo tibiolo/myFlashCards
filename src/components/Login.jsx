@@ -1,5 +1,6 @@
 import React from 'react';
 import Input from './Input';
+import { Link } from 'react-router-dom'
 import '../styles/login.css';
 
 function Login(props) {
@@ -30,7 +31,7 @@ function Login(props) {
           Sign In
         </button>
         <p>
-          Don't have an account? <a href="/Register">Register</a>
+          Don't have an account? <Link to="/register">Register</Link>
         </p>
       </form>
     </div>
