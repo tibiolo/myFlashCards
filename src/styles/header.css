@@ -1,12 +1,11 @@
 .header {
   height: 7vh;
+  width: 100%;
+  padding-inline: 0.5rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.user-avatar {
-  align-self: flex-end;
-  margin-right: 0.5rem;
-}

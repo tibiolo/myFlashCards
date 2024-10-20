@@ -4,9 +4,17 @@ import '../styles/dashboard.css';
 
 import Header from './Header';
 
-
 function Dashboard() {
-  return <Header />;
+  return (
+    <div className="dashboard">
+      <Header />
+      <main className="content-container">
+        <div className="collection-container">
+          
+        </div>
+      </main>
+    </div>
+  );
 }
 
 export default Dashboard;
