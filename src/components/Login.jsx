@@ -1,11 +1,12 @@
 import React from 'react';
 import Input from './Input';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import '../styles/sign_in_up.css';
+import '../styles/form.css';
 
 function Login(props) {
   return (
-    <div className="sign-in-up-container">
+    <div className="form-container">
       <form action="Submit" method="post">
         <div className="form-title">
           <h2>Sign In</h2>

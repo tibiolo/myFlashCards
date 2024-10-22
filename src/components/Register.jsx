@@ -3,10 +3,11 @@ import Input from './Input';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/sign_in_up.css';
+import '../styles/form.css';
 
 function Register(props) {
   return (
-    <div className="sign-in-up-container">
+    <div className="form-container">
       <form action="Submit" method="post">
         <div className="form-title">
           <h2>Sign Up</h2>

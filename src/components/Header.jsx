@@ -9,7 +9,7 @@ import Button from './Button';
 function Header() {
   return (
     <header className="header">
-      <Button Icon={AddIcon} text="Add Collection" className="add-collection-btn" />
+      <Button Icon={AddIcon} text="Create Collection" className="add-collection-btn" />
       <Avatar className="user-avatar" />
     </header>
   );
