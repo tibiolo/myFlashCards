@@ -1,5 +1,5 @@
 .form-container {
-  height: 100vh;
+  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,6 +55,9 @@ form button {
   padding: 0.8rem;
   background-color: #007bff;
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 form button:hover {
