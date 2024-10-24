@@ -6,8 +6,11 @@ function Input(props) {
     <input
       type={props.type}
       name={props.name}
+      value={props.value}
+      onChange={props.onChange}
       placeholder={props.placeholder}
       autoComplete={props.autocomplete}
+      required={props.required}
     />
   );
 }
