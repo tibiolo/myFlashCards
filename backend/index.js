@@ -60,21 +60,34 @@ app.post('/register', async (req, res) => {
 
     if (checkResult.rows.length > 0) {
       // Should Redirect To Login, because user already exists
+      res
+        .status(200)
+        .json({
+          redirect: true,
+          message: 'User already exists, redirecting to login',
+        });
     } else {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
           console.error('Error hashing password:', err);
+          res
+            .status(500)
+            .json({ redirect: false, message: 'Internal server error.' });
         } else {
           const result = await db.query(
             'INSERT INTO users (email, password) values ($1, $2) RETURNING *',
             [email, hash]
           );
           console.log('Successfully registered user');
+          res
+            .status(201)
+            .json({ redirect: true, message: 'Successfully registered. Redirecting to login' });
         }
       });
     }
   } catch (err) {
     console.log(err);
+    res.status(500).json({ redirect: false, message: "Database error."})
   }
 });
 
