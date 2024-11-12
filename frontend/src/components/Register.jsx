@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from './Input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/sign_in_up.css';
 import '../styles/form.css';
@@ -11,6 +11,8 @@ function Register(props) {
     password: '',
     confirmPassword: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -40,7 +42,12 @@ function Register(props) {
       });
 
       const result = await response.json();
-      console.log('Success', result);
+      if (response.ok && result.redirect) {
+        console.log('Success', result);
+        navigate('/login');
+      } else {
+        alert(result.message || 'An error occurred.');
+      }
     } catch (error) {
       console.log('Error', error);
     }
@@ -81,7 +88,7 @@ function Register(props) {
         />
         <label className="custom-checkbox">
           {/* Need to add state and passing to backend */}
-          <Input type="checkbox" name={"checkbox"} />
+          <Input type="checkbox" name={'checkbox'} />
           <span className="checkmark"></span> I agree to the Terms & Conditons
         </label>
         <button className="no-gap" type="submit">
