@@ -81,7 +81,7 @@ function Register(props) {
         />
         <label className="custom-checkbox">
           {/* Need to add state and passing to backend */}
-          <Input type="checkbox" />
+          <Input type="checkbox" name={"checkbox"} />
           <span className="checkmark"></span> I agree to the Terms & Conditons
         </label>
         <button className="no-gap" type="submit">
