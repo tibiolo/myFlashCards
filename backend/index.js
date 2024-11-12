@@ -16,7 +16,13 @@ const app = express();
 const PORT = process.env.PORT;
 
 // Setting up cors to listen to localhost requests
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000', 
+    methods: ['GET', 'POST'],
+    credentials: true,
+  })
+);
 
 // Setting up session
 app.use(
@@ -60,12 +66,10 @@ app.post('/register', async (req, res) => {
 
     if (checkResult.rows.length > 0) {
       // Should Redirect To Login, because user already exists
-      res
-        .status(200)
-        .json({
-          redirect: true,
-          message: 'User already exists, redirecting to login',
-        });
+      res.status(200).json({
+        redirect: true,
+        message: 'User already exists, redirecting to login',
+      });
     } else {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
@@ -79,24 +83,33 @@ app.post('/register', async (req, res) => {
             [email, hash]
           );
           console.log('Successfully registered user');
-          res
-            .status(201)
-            .json({ redirect: true, message: 'Successfully registered. Redirecting to login' });
+          res.status(201).json({
+            redirect: true,
+            message: 'Successfully registered. Redirecting to login',
+          });
         }
       });
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ redirect: false, message: "Database error."})
+    res.status(500).json({ redirect: false, message: 'Database error.' });
   }
 });
 
 // Setting login route, authenticating user using passport.js
-app.post('/login', (req, res) => {
-  passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/login',
-  });
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: 'Invalid credentials' });
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.status(200).json({ success: true, redirect: '/dashboard' });
+    });
+  })(req, res, next);
 });
 
 // Setting up passport local strategy for user authentication using passport.js
