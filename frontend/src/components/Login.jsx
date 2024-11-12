@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Input from './Input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/sign_in_up.css';
 import '../styles/form.css';
 
@@ -9,6 +9,8 @@ function Login(props) {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -21,7 +23,7 @@ function Login(props) {
     e.preventDefault();
 
     try {
-      const response = fetch('http://localhost:3000/login', {
+      const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,8 +34,16 @@ function Login(props) {
         }),
       });
 
+      console.log(response)
+
       const result = await response.json();
-      console.log('Success', result);
+
+      if (result.success) {
+        // console.log('Success', result);
+        navigate(result.redirect);
+      } else {
+        console.log(result.message || 'Login failed');
+      }
     } catch (error) {
       console.log('Error', error);
     }
