@@ -18,9 +18,8 @@ const PORT = process.env.PORT;
 // Setting up cors to listen to localhost requests
 app.use(
   cors({
-    origin: 'http://localhost:3000', 
-    methods: ['GET', 'POST'],
-    credentials: true,
+    origin: process.env.CLIENT_URL,
+    credentials: true, // Allow cookies to be sent
   })
 );
 
@@ -30,6 +29,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'development',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
   })
 );
 
@@ -147,6 +151,14 @@ passport.use(
     }
   })
 );
+
+app.get('/auth/validate', (req, res) => {
+  if (req.isAuthenticated) {
+    res.json({ user: req.user });
+  } else {
+    res.status(401).json({ message: 'User Not authenticated' });
+  }
+});
 
 passport.serializeUser((user, cb) => {
   cb(null, user);
