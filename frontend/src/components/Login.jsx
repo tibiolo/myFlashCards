@@ -25,6 +25,7 @@ function Login(props) {
     try {
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -34,9 +35,11 @@ function Login(props) {
         }),
       });
 
-      console.log(response)
+      console.log(response);
 
       const result = await response.json();
+
+      console.log(result);
 
       if (result.success) {
         // console.log('Success', result);

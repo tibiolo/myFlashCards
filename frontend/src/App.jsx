@@ -9,6 +9,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import './styles/app.css';
 
+import PrivateRoute from './components/auth/PrivateRoute';
+
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
@@ -21,8 +23,22 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create_collection" element={<CreateCollection />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/create_collection"
+          element={
+            <PrivateRoute>
+              <CreateCollection />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
