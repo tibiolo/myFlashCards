@@ -160,6 +160,25 @@ app.get('/auth/validate', (req, res) => {
   }
 });
 
+app.get('/logout', (req, res) => {
+  if (req.isAuthenticated()) {
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+
+      req.session.destroy((err) => {
+        if (err) {
+          return next(err)
+        }
+
+        res.status(200).json({})
+      })
+
+    });
+  }
+});
+
 passport.serializeUser((user, cb) => {
   cb(null, user);
 });
