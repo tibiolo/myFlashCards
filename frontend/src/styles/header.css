@@ -30,3 +30,42 @@
   background-color: #e0a800;
   box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.15), 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc; 
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; 
+}
+
+.user-avatar:hover {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6); 
+  transform: scale(1); 
+}
+
+
+.dropdown-menu {
+  z-index: 1000;
+  margin-top: 5px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  font-size: 14px;
+  padding: 10px 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Fixes active dropdown menu making whole page white */
+.MuiMenu-root {
+  position: absolute !important; 
+  background-color: transparent !important; 
+}
