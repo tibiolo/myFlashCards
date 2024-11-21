@@ -1,14 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import pg from 'pg';
-import bcrypt from 'bcrypt';
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
-import session from 'express-session';
-import 'dotenv/config';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import pg from "pg";
+import bcrypt from "bcrypt";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import session from "express-session";
+import "dotenv/config";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Setting up express and port
@@ -30,7 +30,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'development',
+      secure: process.env.NODE_ENV === "development",
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     },
@@ -59,12 +59,14 @@ const db = new pg.Client({
 // Connecting to database
 db.connect();
 
-app.post('/register', async (req, res) => {
+
+// lets user register
+app.post("/register", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
   try {
-    const checkResult = await db.query('SELECT * FROM users WHERE email = $1', [
+    const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
 
@@ -72,59 +74,59 @@ app.post('/register', async (req, res) => {
       // Should Redirect To Login, because user already exists
       res.status(200).json({
         redirect: true,
-        message: 'User already exists, redirecting to login',
+        message: "User already exists, redirecting to login",
       });
     } else {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
-          console.error('Error hashing password:', err);
+          console.error("Error hashing password:", err);
           res
             .status(500)
-            .json({ redirect: false, message: 'Internal server error.' });
+            .json({ redirect: false, message: "Internal server error." });
         } else {
           const result = await db.query(
-            'INSERT INTO users (email, password) values ($1, $2) RETURNING *',
+            "INSERT INTO users (email, password) values ($1, $2) RETURNING *",
             [email, hash]
           );
-          console.log('Successfully registered user');
+          console.log("Successfully registered user");
           res.status(201).json({
             redirect: true,
-            message: 'Successfully registered. Redirecting to login',
+            message: "Successfully registered. Redirecting to login",
           });
         }
       });
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ redirect: false, message: 'Database error.' });
+    res.status(500).json({ redirect: false, message: "Database error." });
   }
 });
 
 // Setting login route, authenticating user using passport.js
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) {
       return res
         .status(401)
-        .json({ success: false, message: 'Invalid credentials' });
+        .json({ success: false, message: "Invalid credentials" });
     }
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.status(200).json({ success: true, redirect: '/dashboard' });
+      return res.status(200).json({ success: true, redirect: "/dashboard" });
     });
   })(req, res, next);
 });
 
 // Setting up passport local strategy for user authentication using passport.js
 passport.use(
-  new LocalStrategy({ usernameField: 'email' }, async function verify(
+  new LocalStrategy({ usernameField: "email" }, async function verify(
     email,
     password,
     cb
   ) {
     try {
-      const result = await db.query('SELECT * FROM users WHERE email = $1', [
+      const result = await db.query("SELECT * FROM users WHERE email = $1", [
         email,
       ]);
       if (result.rows.length > 0) {
@@ -132,7 +134,7 @@ passport.use(
         const storedHashedPassword = user.password;
         bcrypt.compare(password, storedHashedPassword, (err, valid) => {
           if (err) {
-            console.log('Error comparing passwords:', err);
+            console.log("Error comparing passwords:", err);
             return cb(err);
           } else {
             if (valid) {
@@ -143,7 +145,7 @@ passport.use(
           }
         });
       } else {
-        return cb('User not found');
+        return cb("User not found");
       }
     } catch (error) {
       console.log(err);
@@ -152,15 +154,18 @@ passport.use(
   })
 );
 
-app.get('/auth/validate', (req, res) => {
+// Validates authentication before allowing access to protected pages
+app.get("/auth/validate", (req, res) => {
   if (req.isAuthenticated) {
     res.json({ user: req.user });
   } else {
-    res.status(401).json({ message: 'User Not authenticated' });
+    res.status(401).json({ message: "User Not authenticated" });
   }
 });
 
-app.get('/logout', (req, res) => {
+
+// Logs user out and destroys session
+app.get("/logout", (req, res) => {
   if (req.isAuthenticated()) {
     req.logout((err) => {
       if (err) {
@@ -169,13 +174,16 @@ app.get('/logout', (req, res) => {
 
       req.session.destroy((err) => {
         if (err) {
-          return next(err)
+          return next(err);
         }
 
-        res.status(200).json({})
-      })
-
+        res
+          .status(200)
+          .json({ message: "Logged out Successfully", redirect: "/login" });
+      });
     });
+  } else {
+    res.status(400).json({ message: "No user logged in", redirect: "/login" });
   }
 });
 
