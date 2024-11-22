@@ -58,38 +58,44 @@ db.connect();
 app.post('/register', async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const acceptTerms = req.body.acceptTerms;
 
   try {
-    const checkResult = await db.query('SELECT * FROM users WHERE email = $1', [
-      email,
-    ]);
+    if (acceptTerms) {
+      const checkResult = await db.query(
+        'SELECT * FROM users WHERE email = $1',
+        [email]
+      );
 
-    if (checkResult.rows.length > 0) {
-      // Should Redirect To Login, because user already exists
-      res.status(200).json({
-        redirect: true,
-        message: 'User already exists, redirecting to login',
-      });
-    } else {
-      bcrypt.hash(password, saltRounds, async (err, hash) => {
-        if (err) {
-          console.error('Error hashing password:', err);
-          res
-            .status(500)
-            .json({ redirect: false, message: 'Internal server error.' });
-        } else {
-          const result = await db.query(
-            'INSERT INTO users (email, password) values ($1, $2) RETURNING *',
-            [email, hash]
-          );
-          console.log('Successfully registered user');
-          res.status(201).json({
-            redirect: true,
-            message: 'Successfully registered. Redirecting to login',
-          });
-        }
-      });
-    }
+      if (checkResult.rows.length > 0) {
+        // Should Redirect To Login, because user already exists
+        res.status(200).json({
+          redirect: true,
+          message: 'User already exists, redirecting to login',
+        });
+      } else {
+        bcrypt.hash(password, saltRounds, async (err, hash) => {
+          if (err) {
+            console.error('Error hashing password:', err);
+            res
+              .status(500)
+              .json({ redirect: false, message: 'Internal server error.' });
+          } else {
+            const result = await db.query(
+              'INSERT INTO users (email, password) values ($1, $2) RETURNING *',
+              [email, hash]
+            );
+            console.log('Successfully registered user');
+            res.status(201).json({
+              redirect: true,
+              message: 'Successfully registered. Redirecting to login',
+            });
+          }
+        });
+      }
+    } else { 
+      res.status(401).json({ redirect: false, message: 'Failed to accept terms and conditions' })
+     }
   } catch (err) {
     console.log(err);
     res.status(500).json({ redirect: false, message: 'Database error.' });

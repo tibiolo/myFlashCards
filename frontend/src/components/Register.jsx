@@ -10,14 +10,16 @@ function Register(props) {
     email: '',
     password: '',
     confirmPassword: '',
+    acceptTerms: false,
   });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === 'checked' ? checked : value,
     });
   };
 
@@ -38,6 +40,7 @@ function Register(props) {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
+          acceptTerms: formData.acceptTerms,
         }),
       });
 
@@ -88,7 +91,12 @@ function Register(props) {
         />
         <label className="custom-checkbox">
           {/* Need to add state and passing to backend */}
-          <Input type="checkbox" name={'checkbox'} />
+          <Input
+            type="checkbox"
+            name={'acceptTerms'}
+            value={formData.acceptTerms}
+            onChange={handleChange}
+          />
           <span className="checkmark"></span> I agree to the Terms & Conditons
         </label>
         <button className="no-gap" type="submit">
