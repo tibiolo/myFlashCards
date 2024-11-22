@@ -31,7 +31,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === 'development',
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'strict',
     },
@@ -164,27 +164,25 @@ app.get('/auth/validate', (req, res) => {
 });
 
 // Logs user out and destroys session
-app.post('/logout', (req, res) => {
+app.get('/logout', (req, res, next) => {
   if (req.isAuthenticated()) {
     req.logout((err) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
 
       req.session.destroy((err) => {
-        if (err) {
-          return next(err);
-        }
+        if (err) return next(err);
 
+        // Clear the session cookie
         res.clearCookie('connect.sid', {
           httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development',
+          secure: process.env.NODE_ENV !== 'development', 
           sameSite: 'strict',
         });
 
-        res
-          .status(200)
-          .json({ message: 'Logged out Successfully', redirect: '/login' });
+        res.status(200).json({
+          message: 'Logged out successfully',
+          redirect: '/login',
+        });
       });
     });
   } else {
