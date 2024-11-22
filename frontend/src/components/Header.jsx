@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import { Avatar, Menu, MenuItem } from "@mui/material";
-import axios from "axios";
-import "../styles/header.css";
+import React, { useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import { Avatar, Menu, MenuItem } from '@mui/material';
+import axios from 'axios';
+import '../styles/header.css';
 
-import Button from "./Button";
-import { useNavigate } from "react-router-dom";
+import Button from './Button';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleNavigate = () => {
-    navigate("/create_collection");
+    navigate('/create_collection');
   };
 
   const handleAvatarClick = (event) => {
@@ -25,14 +25,16 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get("/logout");
+      const response = await axios.get('/logout', {
+        withCredentials: true,
+      });
       console.log(response);
     } catch (err) {
       console.log(err);
     }
 
     handleMenuClose();
-    navigate("/login");
+    navigate('/login');
   };
 
   return (
@@ -49,14 +51,15 @@ function Header() {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
+          disableScrollLock={true}
           className="dropdown-menu"
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
+            vertical: 'bottom',
+            horizontal: 'right',
           }}
           transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
+            vertical: 'top',
+            horizontal: 'right',
           }}
         >
           <MenuItem onClick={handleLogout} className="dropdown-item">
