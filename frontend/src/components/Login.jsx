@@ -8,14 +8,16 @@ function Login(props) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    rememberMe: false,
   });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -32,6 +34,7 @@ function Login(props) {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
+          rememberMe: formData.rememberMe,
         }),
       });
 
@@ -78,7 +81,12 @@ function Login(props) {
           required
         />
         <label className="custom-checkbox">
-          <Input type="checkbox" name={'checkbox'} />
+          <Input
+            type="checkbox"
+            name={'rememberMe'}
+            checked={formData.rememberMe}
+            onChange={handleChange}
+          />
           <span className="checkmark"></span> Remember me
         </label>
         <button className="no-gap" type="submit">

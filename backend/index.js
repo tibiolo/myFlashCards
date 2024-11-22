@@ -29,12 +29,6 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'development',
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'strict',
-    },
   })
 );
 
@@ -111,8 +105,25 @@ app.post('/login', (req, res, next) => {
         .status(401)
         .json({ success: false, message: 'Invalid credentials' });
     }
+
+    const rememberMe = req.body.rememberMe;
+
     req.logIn(user, (err) => {
       if (err) return next(err);
+
+      const cookieOptions = {
+        httpOnly: true,
+        secure: (process.env.NODE_ENV = 'development'),
+        sameSite: 'strict',
+        maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 0,
+      };
+
+      if (rememberMe) {
+        req.session.cookie.maxAge = cookieOptions.maxAge;
+      } else {
+        req.session.cookie.maxAge;
+      }
+
       return res.status(200).json({ success: true, redirect: '/dashboard' });
     });
   })(req, res, next);
@@ -175,7 +186,7 @@ app.get('/logout', (req, res, next) => {
         // Clear the session cookie
         res.clearCookie('connect.sid', {
           httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development', 
+          secure: process.env.NODE_ENV !== 'development',
           sameSite: 'strict',
         });
 
