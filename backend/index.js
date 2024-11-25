@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
@@ -15,11 +16,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(morgan('combined'));
+
 // Setting up cors to listen to localhost requests
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
-    credentials: true, // Allow cookies to be sent
+    credentials: true, 
   })
 );
 
@@ -93,9 +97,12 @@ app.post('/register', async (req, res) => {
           }
         });
       }
-    } else { 
-      res.status(401).json({ redirect: false, message: 'Failed to accept terms and conditions' })
-     }
+    } else {
+      res.status(401).json({
+        redirect: false,
+        message: 'Failed to accept terms and conditions',
+      });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ redirect: false, message: 'Database error.' });
@@ -173,7 +180,7 @@ passport.use(
 
 // Validates authentication before allowing access to protected pages
 app.get('/auth/validate', (req, res) => {
-  if (req.isAuthenticated) {
+  if (req.isAuthenticated()) {
     res.json({ user: req.user });
   } else {
     res.status(401).json({ message: 'User Not authenticated' });
