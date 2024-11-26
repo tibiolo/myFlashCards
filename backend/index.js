@@ -58,6 +58,13 @@ const db = new pg.Client({
 // Connecting to database
 db.connect();
 
+// Route for creating new card collections
+app.post("/create_collection", async (req, res) => {
+  if (req.isAuthenticated()) {
+    
+  }
+})
+
 // lets user register
 app.post('/register', async (req, res) => {
   const email = req.body.email;
