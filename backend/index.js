@@ -23,7 +23,7 @@ app.use(morgan('combined'));
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
-    credentials: true, 
+    credentials: true,
   })
 );
 
@@ -59,11 +59,32 @@ const db = new pg.Client({
 db.connect();
 
 // Route for creating new card collections
-app.post("/create_collection", async (req, res) => {
-  if (req.isAuthenticated()) {
-    
+app.post('/create_collection', async (req, res) => {
+  const { collectionName } = req.body;
+  console.log(collectionName);
+
+  if (!req.isAuthenticated()) {
+    console.log('User is not authenticated'); // Debugging
+  } else {
+    console.log('User Authenticated');
   }
-})
+
+  try {
+    if (req.isAuthenticated()) {
+      res.status(200).json({
+        success: true,
+        redirect: '/dashboard',
+        message: 'Collection Created',
+      });
+    } else {
+      res
+        .status(400)
+        .json({ success: false, message: 'User not authenticated' });
+    }
+  } catch (error) {
+    console.log('Error', error);
+  }
+});
 
 // lets user register
 app.post('/register', async (req, res) => {
