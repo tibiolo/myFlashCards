@@ -46,6 +46,18 @@ form input:focus {
   border-bottom: 2px solid #007bff;
 }
 
+form textarea {
+  outline: none;
+  resize: none;
+  border: 2px solid #d3d3d3;
+  border-radius: 0.2rem;
+  transition: border-color 0.3s ease;
+}
+
+form textarea:focus {
+  border: 2px solid #007bff;
+}
+
 form button {
   outline: none;
   border: none;
