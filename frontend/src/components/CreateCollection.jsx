@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Input from './Input';
+import TextArea from './textArea';
 import Button from './Button';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -11,12 +12,18 @@ import '../styles/form.css';
 import { useNavigate } from 'react-router-dom';
 
 function CreateCollection() {
-  const [collectionName, SetCollectionName] = useState('');
+  const [collectionData, SetCollectionData] = useState({
+    collectionName: '',
+    collectionDescription: '',
+  });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    SetCollectionName(e.target.value);
+    SetCollectionData({
+      ...collectionData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -25,7 +32,7 @@ function CreateCollection() {
     try {
       const response = await axios.post(
         'http://localhost:3000/create_collection',
-        { collectionName },
+        { collectionData },
         { withCredentials: true } // Include cookies
       );
 
@@ -51,9 +58,15 @@ function CreateCollection() {
           <Input
             type={'text'}
             name={'collectionName'}
-            value={collectionName}
+            value={collectionData.collectionName}
             onChange={handleChange}
             placeholder={'New Collection Name'}
+          />
+          <TextArea
+            name={'collectionDescription'}
+            value={collectionData.collectionDescription}
+            onChange={handleChange}
+            placeholder={'Collection Description'}
           />
           <Button className="" text="Create" type="submit" Icon={AddIcon} />
         </form>
