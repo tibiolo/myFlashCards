@@ -19,7 +19,6 @@ const PORT = process.env.PORT;
 app.use(morgan('combined'));
 
 // Setting up cors to listen to localhost requests
-
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -60,8 +59,8 @@ db.connect();
 
 // Route for creating new card collections
 app.post('/create_collection', async (req, res) => {
-  const { collectionName } = req.body;
-  console.log(collectionName);
+  const { collectionName, collectionDescription } = req.body.collectionData;
+  const user_id = req.session.passport.user.user_id;
 
   if (!req.isAuthenticated()) {
     console.log('User is not authenticated'); // Debugging
@@ -71,14 +70,19 @@ app.post('/create_collection', async (req, res) => {
 
   try {
     if (req.isAuthenticated()) {
-      res.status(200).json({
+      const result = await db.query(
+        'INSERT INTO collections (user_id, name, description) VALUES ($1, $2, $3) RETURNING *',
+        [user_id, collectionName, collectionDescription]
+      );
+
+      res.status(201).json({
         success: true,
         redirect: '/dashboard',
         message: 'Collection Created',
       });
     } else {
       res
-        .status(400)
+        .status(401)
         .json({ success: false, message: 'User not authenticated' });
     }
   } catch (error) {
