@@ -111,6 +111,14 @@ app.get('/fetch/collections', async (req, res) => {
   }
 });
 
+app.get('/fetch/collection:id', async (req, res) => {
+  const user_id = req.session.passport.user.user_id;
+  const collection_id = req.params.id
+
+  
+
+})
+
 // lets user register
 app.post('/register', async (req, res) => {
   const email = req.body.email;
