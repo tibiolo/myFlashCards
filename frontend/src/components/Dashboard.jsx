@@ -7,6 +7,8 @@ import Header from './Header';
 import Collection from './Collection';
 
 function Dashboard() {
+  const [collections, setCollections] = useState([]);
+
   const fetchCollections = async () => {
     try {
       const response = await axios.get(
@@ -16,9 +18,9 @@ function Dashboard() {
         }
       );
 
-      if (response.data.success) {
-        console.log(response)
+      if (response) {
         console.log('Sucessfully fetched collections', response.data.result);
+        setCollections(response.data.result);
       } else {
         console.log('Failed to fetch collections');
       }
@@ -31,18 +33,27 @@ function Dashboard() {
     fetchCollections();
   }, []);
 
+  const handleClick = async (e) => {
+
+  }
+
   return (
     <div className="dashboard">
       <Header />
       <main className="content-container">
         <div className="collection-container">
-          <Collection
-            title={'Test Collection'}
-            description={
-              'Lore dsfbnpsdfb psdfbpsdbf sdf  dfsdfuspd a sfupasfuas  asugbpauifgpas sdadasdsad adsasdaf ggrss   asfasfafsa  asfasfasf '
-            }
-            onClick={''}
-          />
+          {collections.length > 0 ? (
+            collections.map((collection, index) => (
+              <Collection
+                key={index}
+                title={collection.name}
+                description={collection.description}
+                onClick={handleClick}
+              />
+            ))
+          ) : (
+            <p>Error no collections found</p>
+          )}
         </div>
       </main>
     </div>
