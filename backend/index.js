@@ -90,6 +90,27 @@ app.post('/create_collection', async (req, res) => {
   }
 });
 
+app.get('/fetch/collections', async (req, res) => {
+  const user_id = req.session.passport.user.user_id;
+
+  try {
+    if (req.isAuthenticated()) {
+      const result = await db.query(
+        'SELECT * FROM collections WHERE user_id = $1',
+        [user_id]
+      );
+
+      console.log(result);
+
+      res.status(200).json({success: true, result: result.rows})
+    } else {
+      console.log('User not authenticated');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 // lets user register
 app.post('/register', async (req, res) => {
   const email = req.body.email;
