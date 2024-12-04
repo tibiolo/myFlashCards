@@ -100,9 +100,7 @@ app.get('/fetch/collections', async (req, res) => {
         [user_id]
       );
 
-      console.log(result);
-
-      res.status(200).json({success: true, result: result.rows})
+      res.status(200).json({ success: true, result: result.rows });
     } else {
       console.log('User not authenticated');
     }
@@ -111,13 +109,22 @@ app.get('/fetch/collections', async (req, res) => {
   }
 });
 
-app.get('/fetch/collection:id', async (req, res) => {
+app.get('/fetch/collection/:id', async (req, res) => {
   const user_id = req.session.passport.user.user_id;
-  const collection_id = req.params.id
+  const collection_id = req.params.id;
 
-  
+  try {
+    if (req.isAuthenticated()) {
+      const result = await db.query("SELECT * FROM flashcards WHERE collection_id = ($1)", [collection_id])
 
-})
+      if (result) {
+        console.log(result.rows)
+      }
+    }
+  } catch (error) {
+    
+  }
+});
 
 // lets user register
 app.post('/register', async (req, res) => {
